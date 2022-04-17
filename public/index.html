@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+    <!-- test -->
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>بلدية أولاد جلال | إنشاء حساب</title>
+
+    <link href="https://apcouleddjellal.dz/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://apcouleddjellal.dz/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="https://apcouleddjellal.dz/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="https://apcouleddjellal.dz/css/animate.css" rel="stylesheet">
+    <link href="https://apcouleddjellal.dz/css/style.css?v=0.0.1" rel="stylesheet">
+    <link rel="shortcut icon" href="https://apcouleddjellal.dz/favicon.ico" type="image/x-icon">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <img style="max-height: 100px;" src="https://apcouleddjellal.dz/img/logo.svg?v=0.0.0.1" id="logo" alt="Logo">
+            <h3>بريد إلكتروني جديد</h3>
+            <p>قم بإنشاء حساب لرؤيته أثناء العمل.</p>
+            <form id="signup" class="m-t" role="form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="text" id="username" name="username" class="form-control" placeholder="المستخدم باللاتينية" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" autocomplete="new-password" minlength="6" class="form-control" placeholder="كلمة المرور" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="key" name="key" class="form-control" placeholder="مفتاح التوثيق" required="">
+                </div>
+                <div class="form-group">
+                        <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> قبول الشروط والسياسة </label></div>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">أنشئ</button>
+
+                <p class="text-muted text-center"><small>هل لديك حساب من قبل?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="https://mail.apcouleddjellal.dz">دخول</a>
+            </form>
+            <p class="m-t"> <small>بلدية أولاد جلال &copy; <?php echo date('Y');  ?></small> </p>
+        </div>
+    </div>
+
+<!-- Mainly scripts -->
+<script src="https://apcouleddjellal.dz/js/jquery-3.1.1.min.js"></script>
+<script src="https://apcouleddjellal.dz/js/popper.min.js"></script>
+<script src="https://apcouleddjellal.dz/js/bootstrap.js"></script>
+<!-- iCheck -->
+<script src="https://apcouleddjellal.dz/js/plugins/iCheck/icheck.min.js"></script>
+<script>
+$(document).ready(function(){
+    
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+    $('#signup').on('submit', function (e) {
+
+    if (e.isDefaultPrevented()) {
+        // handle the invalid form...
+    } else {
+        // everything looks good!
+        // On empêche le navigateur de soumettre le formulaire
+        e.preventDefault();
+
+        var object = {
+            "query":"signup",
+            "username":$('#username').val(),
+            "password":$('#password').val(),
+        };
+        var json = JSON.stringify(object);
+        var form_data = new FormData();
+        form_data.append('query', json);
+        form_data.append('api-key', $('#key').val());
+        $.ajax({
+            url: 'https://api.apcouleddjellal.dz',
+            type: 'post',
+            dataType: 'text',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data,
+            success : function(result, statut){
+                var response = JSON.parse(result);
+                if (response.success) {
+                    alert('Création est réussi.');
+                }else {
+                    var errors = response.errors.map(function (error) {
+                        return error.message;
+                    });
+                    alert(errors);
+                }
+            },            
+            error : function(result, statut, erreur){
+                alert(erreur);
+            },
+            complete : function(result, statut){
+                
+            }
+        });
+    }
+    });
+});
+</script>
+</body>
+</html>
